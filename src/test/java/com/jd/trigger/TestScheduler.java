@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +23,18 @@ public class TestScheduler {
     public void pasuseTrigger() throws SchedulerException {
         TriggerKey triggerKey = TriggerKey.triggerKey("trigger1", "group1");
         scheduler.pauseTrigger(triggerKey);
+    }
+    @Test
+    public void resumeTrigger() throws SchedulerException {
+        TriggerKey triggerKey = TriggerKey.triggerKey("trigger1", "group1");
+         scheduler.resumeTrigger(triggerKey);
+    }
+    @Test
+    public void testTriggerData() throws SchedulerException {
+        TriggerKey triggerKey = TriggerKey.triggerKey("trigger1", "group1");
+        Trigger trigger = scheduler.getTrigger(triggerKey);
+        trigger.getJobDataMap().put("message", Arrays.asList("this","is","a"));
+        scheduler.rescheduleJob(triggerKey,trigger);
     }
     @Test
     public void getTriggerState() throws SchedulerException {
@@ -44,6 +58,11 @@ public class TestScheduler {
     public void pauseJob() throws SchedulerException {
         JobKey jobKey = JobKey.jobKey("job1", "group1");
         scheduler.pauseJob(jobKey);
+    }
+    @Test
+    public void deleteJob() throws SchedulerException {
+        JobKey jobKey = JobKey.jobKey("job1", "group1");
+        scheduler.deleteJob(jobKey);
     }
 
 }

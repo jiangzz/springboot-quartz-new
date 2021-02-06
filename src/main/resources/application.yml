@@ -1,37 +1,14 @@
 
-spring:
-  profiles:
-    active: dev
-  quartz:
-    job-store-type: jdbc
-    properties:
-      org:
-        quartz:
-          datasource:
-            driver-class-name: com.mysql.cj.jdbc.Driver
-            url: jdbc:mysql://localhost:3306/quartz?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-            username: root
-            password: root
-          scheduler:
-            instancName: quartz-cluster
-            instanceId: AUTO
-          jobStore:
-            class: org.quartz.impl.jdbcjobstore.JobStoreTX
-            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate #StdJDBCDelegate说明支持集群
-            tablePrefix: QRTZ_
-            isClustered: true
-            clusterCheckinInterval: 1000
-            useProperties: false
-          threadPool:
-            class: org.quartz.simpl.SimpleThreadPool
-            threadCount: 100
-            threadPriority: 5
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test?useUnicode=true
-    username: root
-    password: root
-server:
-  port: 8080
-  servlet:
-    context-path: /
+nacos:
+  config:
+    server-addr: 127.0.0.1:8848
+    namespace: 022f398d-cbac-4c0f-98d7-fa81e3a7088d
+    data-id: application-@spring.active@.yml
+    group: PARSER_GROUP
+    type: yaml
+    auto-refresh: true
+    enable-remote-sync-config: true
+    context-path: nacos
+    # 此参数必须开启，若不开启则不会去调用扩展配置 bug
+    bootstrap:
+      log-enable: true

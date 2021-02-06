@@ -8,6 +8,7 @@ import org.quartz.PersistJobDataAfterExecution;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.util.Date;
+import java.util.List;
 
 //@PersistJobDataAfterExecution
 @DisallowConcurrentExecution
@@ -15,7 +16,11 @@ import java.util.Date;
 public class QuartzJob extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        String taskName = context.getJobDetail().getJobDataMap().getString("name");
-        log.info("---> Quartz job {}, {} <----", new Date(), taskName);
+        List<String> messages = (List<String>) context.getTrigger().getJobDataMap().get("messages");
+        for (String message : messages) {
+            String taskName = context.getJobDetail().getJobDataMap().getString("name");
+            log.info("---> Quartz job {}, {},{} <----", new Date(), taskName,messages);
+        }
+
     }
 }
