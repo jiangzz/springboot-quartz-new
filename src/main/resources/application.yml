@@ -11,3 +11,93 @@ nacos:
     # 此参数必须开启，若不开启则不会去调用扩展配置 bug
     bootstrap:
       log-enable: true
+
+
+server:
+  port: 8081
+spring:
+  quartz:
+    job-store-type: jdbc
+    properties:
+      org:
+        quartz:
+          datasource:
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            url: jdbc:mysql://localhost:3306/quartz?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+            username: root
+            password: root
+          scheduler:
+            instancName: quartz-cluster
+            instanceId: AUTO
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
+            isClustered: true
+            clusterCheckinInterval: 1000
+            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 100
+            threadPriority: 5
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true
+    username: root
+    password: root
+  profiles:
+    active: dev
+
+
+#/application-distribute-scheduler
+#    |-应用查询服务
+#       |-UUID信息 - { 状态 | 开启时间 | 上下文信息}
+#         |-workers
+#            |- 节点注册信息- (taskID 切片信息 | 执行开始时间 | 执行结束时间 | 重试次数)
+#            ...
+#         |-failed       失败的切片信
+#             |- 节点注册信息- (taksID 切片信息 | 执行开始时间 | 执行结束时间 | 重试次数)
+#             ...
+#         |-successed    成功切片信息
+#            |- 节点注册信息- (taksID 切片信息 | 执行开始时间 | 执行结束时间 | 重试次数)
+#            ...
+#    |-workers
+#       work-0001 --临时节点
+#       work-0002 --临时节点
+#       work-0003 --临时节点
+#       work-0004 --临时节点
+
+server:
+  port: 8081
+spring:
+  quartz:
+    job-store-type: jdbc
+    properties:
+      org:
+        quartz:
+          datasource:
+            driver-class-name: com.mysql.cj.jdbc.Driver
+            url: jdbc:mysql://localhost:3306/quartz?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+            username: root
+            password: root
+          scheduler:
+            instancName: quartz-cluster
+            instanceId: AUTO
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate #StdJDBCDelegate说明支持集群
+            tablePrefix: QRTZ_
+            isClustered: true
+            clusterCheckinInterval: 1000
+            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 100
+            threadPriority: 5
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true
+    username: root
+    password: root
+  profiles:
+    active: dev
